@@ -1,0 +1,130 @@
+D:\Work\Gerkon\system\ software\EWARM\config\BrowseInfo\Application\WEB\httpd_cgi_ssi.pbi: \
+  D:\Work\Gerkon\system\ software\WEB\httpd_cgi_ssi.c \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\debug.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\arch.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\system\arch\cc.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\system\arch\cpu.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\stdlib.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\ycheck.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\yvals.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\DLib_Defaults.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\DLib_Config_Full.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\DLib_Product.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\ysizet.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\DLib_Product_stdlib.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\stdio.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\stddef.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\stdint.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\inttypes.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\limits.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\ctype.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\opt.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\LWIP\Target\lwipopts.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Core\Inc\main.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Core\Inc\stm32f7xx_hal_conf.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_rcc.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_def.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\CMSIS\Device\ST\STM32F7xx\Include\stm32f7xx.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\CMSIS\Device\ST\STM32F7xx\Include\stm32f745xx.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\CMSIS\Include\core_cm7.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\CMSIS\Include\cmsis_version.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\CMSIS\Include\cmsis_compiler.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\CMSIS\Include\cmsis_iccarm.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\aarch32\iccarm_builtin.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\CMSIS\Include\mpu_armv7.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\CMSIS\Device\ST\STM32F7xx\Include\system_stm32f7xx.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_rcc_ex.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_exti.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_gpio.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_gpio_ex.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_dma.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_dma_ex.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_cortex.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_adc.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_adc_ex.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_dac.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_dac_ex.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_eth.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_flash.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_flash_ex.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_sdram.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_ll_fmc.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_i2c.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_i2c_ex.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_pwr.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_pwr_ex.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_spi.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_spi_ex.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_tim.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_tim_ex.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\debug.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\tcp.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\tcpbase.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\mem.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\pbuf.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\err.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\ip.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\def.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\ip_addr.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\ip4_addr.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\ip6_addr.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\def.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\netif.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\stats.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\memp.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\priv\memp_std.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\priv\memp_priv.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\priv\mem_priv.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\ip4.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\prot\ip4.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\system\arch\bpstruct.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\system\arch\epstruct.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\ip6.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\prot\ip.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\icmp.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\prot\icmp.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\LWIP\Target\ethernetif.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS\cmsis_os.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\FreeRTOS.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Core\Inc\FreeRTOSConfig.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\projdefs.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\portable.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\deprecated_definitions.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\portable\IAR\ARM_CM7\r0p1\portmacro.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\aarch32\intrinsics.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\aarch32\iar_intrinsics_common.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\mpu_wrappers.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\task.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\task.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\event_groups.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h \
+  D:\Work\Gerkon\system\ software\WEB\httpd.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\opt.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\err.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\pbuf.h \
+  D:\Work\Gerkon\system\ software\WEB\fs.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\string.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\DLib_Product_string.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Core\Inc\eeprom.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\LWIP\App\lwip.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\netif\etharp.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\etharp.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\prot\ethernet.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\prot\ieee.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\prot\etharp.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\netif\ethernet.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\dhcp.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\timeouts.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\sys.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\system\arch\sys_arch.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Middlewares\Third_Party\LwIP\src\include\lwip\tcpip.h \
+  D:\Distr\IAR\ Embedded\ Workbench\ for\ ARM\ v9.10.2\ x64\arm\inc\c\stdbool.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Core\Inc\process.h \
+  D:\Work\Gerkon\system\ software\EWARM\..\Core\Inc\analog.h
