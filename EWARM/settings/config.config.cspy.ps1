@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "D:\Work\system software\EWARM\settings\config.config.general.xcl" --backend -f "D:\Work\system software\EWARM\settings\config.config.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "D:\Work\Gerkon\system software\EWARM\settings\config.config.general.xcl" --backend -f "D:\Work\Gerkon\system software\EWARM\settings\config.config.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "D:\Work\system software\EWARM\settings\config.config.general.xcl" --debug_file=$debugfile --backend -f "D:\Work\system software\EWARM\settings\config.config.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "D:\Work\Gerkon\system software\EWARM\settings\config.config.general.xcl" --debug_file=$debugfile --backend -f "D:\Work\Gerkon\system software\EWARM\settings\config.config.driver.xcl" 
 }

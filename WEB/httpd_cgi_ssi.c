@@ -86,7 +86,7 @@ u16_t SSI_Handler(int iIndex, char *pcInsert, int iInsertLen){
      strcpy(pcInsert + lenString, "\n");
      lenString++;       
     /*B*/ 
-     sprintf(string, "%d", GetB_HS());          
+     sprintf(string, "%d", GetU_HS() ); // GetB_HS()        
      strcpy(pcInsert + lenString, string);
      lenString += strlen(string);
      /*new line*/
@@ -133,10 +133,18 @@ u16_t SSI_Handler(int iIndex, char *pcInsert, int iInsertLen){
      lenString += strlen(string);
      /*new line*/
      strcpy(pcInsert + lenString, "\n");
-     lenString++;       
+     lenString++;    
+      /*suz type*/
+      sprintf(string, "%d", GetSuzType());          
+     strcpy(pcInsert + lenString, string);
+     lenString += strlen(string); 
+      /*new line*/
+     strcpy(pcInsert + lenString, "\n");
+     lenString++;   
      /*SW version*/
      strcpy(pcInsert + lenString, __DATE__); 
-     lenString += strlen(__DATE__);      
+     lenString += strlen(__DATE__); 
+       
     }
    return strlen(pcInsert); 
   }
@@ -278,7 +286,7 @@ const char * WEB_CGI_Handler0(int iIndex, int iNumParams, char *pcParam[], char 
 
 const char * WEB_CGI_Handler1(int iIndex, int iNumParams, char *pcParam[], char *pcValue[]){
  uint32_t i;
- uint16_t rscurr, freq, coilcurr, maxRs, maxHs, maxDispersion;
+ uint16_t suz, rscurr, freq, coilcurr, maxRs, maxHs, maxDispersion;
  devparam_t devparam;
  
  if(( iIndex != 1 ) || (!WEBFlags.pass_OK)) return  "/index.shtml"; 
@@ -293,11 +301,21 @@ const char * WEB_CGI_Handler1(int iIndex, int iNumParams, char *pcParam[], char 
    
    if(strcmp(pcParam[i] , "freq") == 0 ) freq = atoi(pcValue[i]);  
    if(strcmp(pcParam[i] , "rscurr") == 0 ) rscurr = atoi(pcValue[i]);
+   if(strcmp(pcParam[i] , "suz") == 0 ) suz = atoi(pcValue[i]);
    if(strcmp(pcParam[i] , "coilcurr") == 0 ) coilcurr = atoi(pcValue[i]);
 
-   if(strcmp(pcParam[i] , "maxRs") == 0 ) maxRs = atoi(pcValue[i]); 
-    if(strcmp(pcParam[i] , "maxDispersion") == 0 ) maxDispersion = atoi(pcValue[i]); 
-    if(strcmp(pcParam[i] , "maxHs") == 0 ) maxHs = atoi(pcValue[i]); 
+   if(strcmp(pcParam[i] , "maxRs") == 0 )         {
+     maxRs = atoi(pcValue[i]);
+   
+   } 
+   if(strcmp(pcParam[i] , "maxDispersion") == 0 ){ 
+     maxDispersion = atoi(pcValue[i]); 
+   
+   }
+   if(strcmp(pcParam[i] , "maxHs") == 0 )         {
+     maxHs = atoi(pcValue[i]); 
+   
+   }
    
    if(strcmp(pcParam[i] , "cyc_tststart") == 0 ) {
      SetCycleTestMode();
@@ -306,7 +324,7 @@ const char * WEB_CGI_Handler1(int iIndex, int iNumParams, char *pcParam[], char 
    if(strcmp(pcParam[i] , "cyc_tststop") == 0 ) 
    {
      StopRSTest(); 
-     SetSignleTestMode();
+    // SetSignleTestMode();
    }      
    if(strcmp(pcParam[i] , "single_tststart") == 0 ){
      SetSignleTestMode();
@@ -317,6 +335,12 @@ const char * WEB_CGI_Handler1(int iIndex, int iNumParams, char *pcParam[], char 
      SetRSCurrent(rscurr); 
      ModuleGetParam(&devparam);
      devparam.testparam.Irs = rscurr;          
+     ModuleSetParam(&devparam);     
+    }
+    if(strcmp(pcParam[i] , "s_suz") == 0 ){
+     SetSuzType(suz); 
+     ModuleGetParam(&devparam);
+     devparam.testparam.Type = suz;          
      ModuleSetParam(&devparam);     
     }
    if(strcmp(pcParam[i] , "s_coilcurr") == 0 ){
@@ -332,10 +356,34 @@ const char * WEB_CGI_Handler1(int iIndex, int iNumParams, char *pcParam[], char 
      devparam.testparam.Fcoil = freq;          
      ModuleSetParam(&devparam);               
     }
-   if (strcmp(pcParam[i] , "coilon") == 0 )       SetOnContinuously();
-   if(strcmp(pcParam[i] , "s_maxRs") == 0 )        SetMaxRs(maxRs);// SetOnContinuously(); 
-   if(strcmp(pcParam[i] , "s_maxDispersion") == 0 ) SetMaxDispersion(maxDispersion);//SetOnContinuously(); 
-   if(strcmp(pcParam[i] , "s_maxHs") == 0 )          SetMaxHs(maxHs); //SetOnContinuously(); 
+   if(strcmp(pcParam[i] , "coilon") == 0 )              
+   {
+     //StartRSTest();
+     SetOnContinuously(); 
+   }
+     
+   if(strcmp(pcParam[i] , "s_maxRs") == 0 )             
+     
+   {
+     SetMaxRs(maxRs);  
+     ModuleGetParam(&devparam);
+     devparam.testparam.MaxRson = maxRs;          
+     ModuleSetParam(&devparam);          
+    }
+   if(strcmp(pcParam[i] , "s_maxDispersion") == 0 )     
+      {
+     SetMaxDispersion(maxDispersion); 
+     ModuleGetParam(&devparam);
+     devparam.testparam.MaxDispersion = maxDispersion;          
+     ModuleSetParam(&devparam);          
+    }
+   if(strcmp(pcParam[i] , "s_maxHs") == 0 )             
+      {
+     SetMaxHs(maxHs);  
+     ModuleGetParam(&devparam);
+     devparam.testparam.MaxHS = maxHs;          
+     ModuleSetParam(&devparam);          
+    }
   
  
  }

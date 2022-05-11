@@ -26,6 +26,10 @@ typedef struct{
    uint16_t Icoil;
    uint16_t Fcoil;
    uint16_t Irs;
+   uint16_t Type;
+   uint16_t MaxRson;
+   uint16_t MaxHS;
+   uint16_t MaxDispersion;
   }testparam;
 }devparam_t;
 

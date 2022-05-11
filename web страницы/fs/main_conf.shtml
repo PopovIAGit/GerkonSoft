@@ -155,7 +155,10 @@ height: 1px;
 										Счетчик тестов геркона<br>
 										Счетчик срабатывания геркона<br>
 										Время переходного процесса, мкс<br>
-										Версия программного обеспечения
+										Тип СУЖ<br>
+										Версия программного обеспечения<br>
+										
+										
 		</td>
 		<td align="left" class="td"><output type="text"><pre class="p"><!--#t--> </pre></td>							
 	</tr>						
@@ -226,7 +229,7 @@ height: 1px;
 
 
 <hr>
-<p class="h1">Выбрать ток опроса</p>
+<p class="h1">Выбрать ток опроса и типа СУЖ</p>
 <form name = "set_param" method = "get" action = "/web1.cgi">
 <table rules="none" width="100%">
 	<tbody>		
@@ -241,6 +244,16 @@ height: 1px;
 			</td>
 		<td align="left" width="50%"><button class="button button-save" type="submit" value="Test" name="s_rscurr">Установить</button></td>
 	</tr>	
+			<tr>
+		<td class="td" align="left" width="20%">Тип СУЖ:</td>
+			<td><p><select id="soflow1" name="suz" width="30%">
+			<option disabled>Выбрать</option>
+			<option value="0" name="parity">0-СУЖ ТОМЗЭЛ</option>											
+			<option value="1" name="parity">1-СУЖ Сторонних производителей</option>					
+		</select></p>
+			</td>
+		<td align="left" width="50%"><button class="button button-save" type="submit" value="Test" name="s_suz">Установить</button></td>
+	</tr>
 	</tbody>			
 </tbody>
 </table>
@@ -303,14 +316,14 @@ height: 1px;
 <table rules="none" width="100%">
 <tbody>
 	<tr>
-		<td  class="td" align="left">Магнитное поле, мТл:</td>
-		<td  align="left" > <input name="maxHs" size="16" maxlength="16" class="input" value = "1"> </td>
+		<td  class="td" align="left">Магнитное поле:</td>
+		<td  align="left" > <input name="maxHs" size="16" maxlength="16" class="input" value = "740"> </td>
 		<td><button type="submit"  name="s_maxHs" align="center" class="button button-save">Установить</button></td>					
 	</tr>
 </tbody>
 </table>
 <br>
-<p class="p">Значение по умолчанию ХХХ мТл</p>
+<p class="p">Значение по умолчанию 740 </p>
 </form>	
 
 

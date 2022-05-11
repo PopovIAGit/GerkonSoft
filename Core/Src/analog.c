@@ -84,6 +84,9 @@ void SetRSCurrent(uint32_t curr){
    }
 }
 
+
+
+
 uint32_t GetRSCurrent(){
  return  rs_current;
 }
@@ -365,10 +368,12 @@ uint16_t GetR_ISO(){/*in MOmh*/
   const uint32_t UREF = 3000;
   
   U_MR = (uint32_t)U_MR_avg * UREF / 4096;    
-  if((U_MR < TEST_VLT) && (U_MR !=0)) R_ISO = (TEST_VLT - U_MR) * R_izm / U_MR; /*in MOmh*/
-  else R_ISO = 100;
-  if(R_ISO > 32000) R_ISO = 100;
-  return (uint16_t)R_ISO;
+  if((U_MR < TEST_VLT) && (U_MR !=0)) R_ISO = (TEST_VLT - U_MR) * R_izm *100/ U_MR ; //in MOmh
+  else 
+    R_ISO = 100;
+  if(R_ISO > 32000) 
+    R_ISO = 100;
+  return (uint16_t)U_MR_avg;//R_ISO;
 }
 
 uint16_t GetRS_ON(){/*in mOmh*/
@@ -503,8 +508,10 @@ void AnalogMeashure(){
        /*calculate RS on resistance*/
        R_RS_summa_shadow = 0;
        for(idx = e_time; idx < BUFSIZE / 4; idx++) R_RS_summa_shadow += rptr->R_RS[idx];
-       if(BUFSIZE / 4 != e_time) R_RSon_avg = R_RS_summa_shadow / (BUFSIZE / 8 - e_time);
-       else R_RSon_avg = 10000;
+       if(BUFSIZE / 4 != e_time) 
+         R_RSon_avg = R_RS_summa_shadow / ((BUFSIZE / 8) - e_time);
+       else 
+         R_RSon_avg = 10000;
        
        if(dev_cntrl.activate_rstest){
        dispertion.avg += R_RSon_avg;
