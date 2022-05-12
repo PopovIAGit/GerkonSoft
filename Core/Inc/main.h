@@ -122,7 +122,6 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 #define BUFSIZE 2000 * 2
-#define POVERSION 1
 /* USER CODE END Private defines */
 
 

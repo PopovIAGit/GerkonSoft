@@ -12,94 +12,99 @@
 #include "process.h"
 #include "eeprom.h"
 
+
 extern TIM_HandleTypeDef htim1;
 
 enum{SIGNEMODE, CYCLEMODE};
 
+
 #define LinearInterpolation(x1, y1, x2, y2, x) \
 					(y1 +  ( (y2 - y1)*(x - x1) )/(x2 - x1) ) 
 
-#define NUM_DOTS 37                                          
+                                        
 // Точки 		                темпер.  АЦП.        сопр.    №
 TDot dots[NUM_DOTS] = {			4000,   750,	    //  525	0 455
-					5000,   752,         //  691	1 484
-					6000,	756,	    //  820	2 500
-					7000,	760,	    //  1039	3 615
-					8000,	766,	    //  1379	4 710
-					9000,   770,	    //  1670	5 790
-					10000,  772,	    //  1774	6 810
-                                        11000,	778,	    //  1039	3 615
-					12000,	782,	    //  1379	4 710
-					13000,   786,	    //  1670	5 790
-					14000,   790,	    //  1774	6 810
-                                        15000,	 794,	    //  1039	3 615
-					16000,	 798,	    //  1379	4 710
-					17000,   804,	    //  1670	5 790
-					18000,   808,	    //  1774	6 810
-                                        19000,	 812,	    //  1039	3 615
-					20000,	 816,	    //  1379	4 710
-					21000,   820,	    //  1670	5 790
-					22000,   826,	    //  1774	6 810
-                                        23000,	 830,	    //  1039	3 615
-					24000,	 834,	    //  1379	4 710
-					25000,   838,	    //  1670	5 790
-					26000,   842,	    //  1774	6 810
-                                        27000,	 846,	    //  1039	3 615
-					28000,	 850,	    //  1379	4 710
-					29000,   854,	    //  1670	5 790
-					30000,   858,	    //  1774	6 810
-                                        31000,	 864,	    //  1039	3 615
-					32000,	 868,	    //  1379	4 710
-					33000,   872,	    //  1670	5 790
-					34000,   876,	    //  1774	6 810
-                                        35000,   880,	    //  1774	6 810
-                                        36000,   886,	    //  1774	6 810
-                                        37000,   890,	    //  1774	6 810
-                                        38000,   894,	    //  1774	6 810
-                                        39000,   898,	    //  1774	6 810
-					40000,   902};	    //  1882	7 840
-
-
+					5000,   754,         //  691	1 484
+					6000,	760,	    //  820	2 500
+					7000,	764,	    //  1039	3 615
+					8000,	770,	    //  1379	4 710
+					9000,   774,	    //  1670	5 790
+					10000,  778,	    //  1774	6 810
+                                        11000,	784,	    //  1039	3 615
+					12000,	788,	    //  1379	4 710
+					13000,   794,	    //  1670	5 790
+					14000,   798,	    //  1774	6 810
+                                        15000,	 804,	    //  1039	3 615
+					16000,	 810,	    //  1379	4 710
+					17000,   816,	    //  1670	5 790
+					18000,   820,	    //  1774	6 810
+                                        19000,	 826,	    //  1039	3 615
+					20000,	 832,	    //  1379	4 710
+					21000,   836,	    //  1670	5 790
+					22000,   842,	    //  1774	6 810
+                                        23000,	 848,	    //  1039	3 615
+					24000,	 854,	    //  1379	4 710
+					25000,   858,	    //  1670	5 790
+					26000,   864,	    //  1774	6 810
+                                        27000,	 868,	    //  1039	3 615
+					28000,	 872,	    //  1379	4 710
+					29000,   878,	    //  1670	5 790
+					30000,   882,	    //  1774	6 810
+                                        31000,	 888,	    //  1039	3 615
+					32000,	 892,	    //  1379	4 710
+					33000,   898,	    //  1670	5 790
+					34000,   902,	    //  1774	6 810
+                                        35000,   908,	    //  1774	6 810
+                                        36000,   914,	    //  1774	6 810
+                                        37000,   918,	    //  1774	6 810
+                                        38000,   924,	    //  1774	6 810
+                                        39000,   930,	    //  1774	6 810
+					40000,   936};	    //  1882	7 840
 
  Tdev_cntrl dev_cntrl;
 
 static devparam_t confparam;
+
 static float button_rs = 0.0, button_hs = 0.0;
 static bool buttrs_state = false, butths_state = false, butths_long_state = false, buttrs_long_state = false;
 
 #define GREEN_LED 1
 #define RED_LED 2
+#define ULTRA_LONG_LED 30000
 #define LONG_LED 5000
 #define SHORT_LED 500
 #define TOGGLE_LED 1
 #define NOTOGGLE_LED 0   
   
-uint32_t led_work_time = LONG_LED;
-uint32_t led_test_time = 0;
+uint32_t led_work_time = SHORT_LED;
+uint32_t led_test_time = LONG_LED;
 uint32_t led_gerkon_time = 0;
     
   uint32_t timerLed1 = 0;//osKernelSysTick();
   uint32_t timerLed2 = 0;//osKernelSysTick();
 
- static uint8_t LedWork = 1;
- static uint8_t LedTest = 1;
+ static uint8_t LedWork = GREEN_LED;
+ static uint8_t LedTest = 0;
  static uint8_t LedGercon = 0;
  
  
 static uint32_t minR = 500000;
 static uint32_t minRprev = 500000;
 
+static uint32_t minRiso = 0;
+static uint32_t minRisoFinale = 0;
+
 static uint32_t maxHs = 0;
 static uint32_t maxHSfinale = 0;
 /*-----------------------------------------------------------------------------
 ToDo List
-1 поиск положения -
-2 проверка геркона 2/3 - проверить на соманом
-3 АЦП датчика холла -
-4 Подстройка катушки под поплавок -
+1 поиск положения - 
+2 проверка геркона 2/3 - READY
+3 АЦП датчика холла - READY
+4 Подстройка катушки под поплавок - READY
 5 Компановка веба -
 6 Подключение javascript -
-7 Управление - долгое нажатие, короткое нажатие, отпускание и тд - ready
+7 Управление - долгое нажатие, короткое нажатие, отпускание и тд - READY
 8 Индикация типа нажатий - подумать
 -----------------------------------------------------------------------------*/
 
@@ -108,7 +113,7 @@ void TempObserverInit(TTempObserver *p)
 {
     int16_t i = 0;
 
-    for (i = 0; i < 30; i++)
+    for (i = 0; i < NUM_DOTS; i++)
 	p->dots[i] = dots[i];
     p->maxResist = KTY83_MAX_RESIST;
 }
@@ -120,14 +125,14 @@ void TempObserverUpdate(TTempObserver *p)
 	// Значение АЦП меньше минимально-допустимого или больше минимально-допустимого
 	if (p->inputR <= KTY83_MIN_RESIST)		
 	{
-		p->fault = false;
-		p->outputT = 999;
+		p->fault = true;
+		p->outputT = 1000;
 		return;
 	}
-	else if (p->inputR >= p->maxResist )
+	else if (p->inputR >= KTY83_MAX_RESIST )
 	{
-		p->fault = true;					// это значит обрыв датчика температуры или его сбой
-		p->outputT = 999;
+		//p->fault = true;					// это значит обрыв датчика температуры или его сбой
+		p->outputT = 40000;
 		return;		
 	}
 	else 									// Значение АЦП в пределах
@@ -159,17 +164,17 @@ void TempObserverUpdate(TTempObserver *p)
 }
 
 void Algorithm(){
- // static float button_rs = 3.3, button_hs = 3.3;
- 
+  
+  /*
    timerLed1 = osKernelSysTick();
-   timerLed2 = osKernelSysTick();
+   timerLed2 = osKernelSysTick();*/
   
   uint32_t btnRsTimer = 0; //osKernelSysTick();
   uint32_t btnHsTimer = 0; //osKernelSysTick();
-  enum{WAIT, CHOOSING_GAIN, TEST, CONTINUOUSLY_ON} fsm = WAIT;
+  enum{WAIT, CHOOSING_GAIN, TEST, CONTINUOUSLY_ON, POPLOVOK_TEST} fsm = WAIT;
   const uint32_t UREF = 2500;
-  devparam_t devparam;
 
+    
   SetSignalGain(GAIN_1);
   osDelay(100);
   dev_cntrl.activate_rstest = false;
@@ -179,20 +184,26 @@ void Algorithm(){
   dev_cntrl.calibrateR = false;
   dev_cntrl.continuously_on = false;
   dev_cntrl.stable_on = false;
+  dev_cntrl.findMinR = false;
+  dev_cntrl.findR = false;
   dev_cntrl.max_Rs = 300;
   dev_cntrl.max_Dispersion = 100;
+  dev_cntrl.max_Hs = 1;
   dev_cntrl.max_Hs = 740;
   dev_cntrl.saved_Riso = 0;
   dev_cntrl.TempObserver.inputR = 0;
-
-  TempObserverInit(&dev_cntrl.TempObserver);
   
+  TempObserverInit(&dev_cntrl.TempObserver); 
   DisableCoilPower();
   ModuleGetParam(&confparam);   
 
   SetCoilCurrent(confparam.testparam.Icoil);
   SetRSCurrent(confparam.testparam.Irs);
   SetCoilPWMFreq(confparam.testparam.Fcoil); 
+  SetSuzType(confparam.testparam.Type);
+  SetMaxDispersion(confparam.testparam.MaxDispersion);
+  SetMaxHs(confparam.testparam.MaxHS);
+  SetMaxRs(confparam.testparam.MaxRson);
   
   //dev_cntrl.activate_rstest = true;
   //dev_cntrl.mode = CYCLEMODE;
@@ -201,32 +212,32 @@ void Algorithm(){
   
   for(;;){
 
-   //indication----------------------------------------------------------------  
-   // левый(Работа)
+ //indication----------------------------------------------------------------  
+  // левый(Работа)
  
     if (LedWork == RED_LED)
       {    
-        HAL_GPIO_WritePin(WRKLED_R_GPIO_Port, WRKLED_R_Pin, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(WRKLED_G_GPIO_Port, WRKLED_G_Pin, GPIO_PIN_RESET);
+      //  HAL_GPIO_WritePin(WRKLED_R_GPIO_Port, WRKLED_R_Pin, GPIO_PIN_SET);
+      //  HAL_GPIO_WritePin(WRKLED_G_GPIO_Port, WRKLED_G_Pin, GPIO_PIN_RESET);
         
-        if (abs(timerLed2 - osKernelSysTick()) > LONG_LED)
+        if (abs(timerLed2 - osKernelSysTick()) > led_work_time)
         {
           timerLed2 = osKernelSysTick();
-          LedWork = 0;
-          //HAL_GPIO_WritePin(WRKLED_R_GPIO_Port, WRKLED_R_Pin, GPIO_PIN_SET);
+        //  LedWork = 0;
+          HAL_GPIO_TogglePin(WRKLED_R_GPIO_Port, WRKLED_R_Pin);
         }  
       }
       else if (LedWork == GREEN_LED)
       {       
-         HAL_GPIO_WritePin(WRKLED_R_GPIO_Port, WRKLED_R_Pin, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(WRKLED_G_GPIO_Port,  WRKLED_G_Pin, GPIO_PIN_SET);
+         // HAL_GPIO_WritePin(WRKLED_R_GPIO_Port, WRKLED_R_Pin, GPIO_PIN_RESET);
+         // HAL_GPIO_WritePin(WRKLED_G_GPIO_Port,  WRKLED_G_Pin, GPIO_PIN_SET);
         
-        if (abs(timerLed2 - osKernelSysTick()) > LONG_LED)
+        if (abs(timerLed2 - osKernelSysTick()) > led_work_time)
         {
           timerLed2 = osKernelSysTick();
-          LedWork = 0;
-        //  HAL_GPIO_TogglePin(WRKLED_G_GPIO_Port, WRKLED_G_Pin);
-        }
+         // LedWork = 0;
+          HAL_GPIO_TogglePin(WRKLED_G_GPIO_Port, WRKLED_G_Pin);
+        }  
       }
       else 
       {
@@ -240,7 +251,7 @@ void Algorithm(){
     {
       HAL_GPIO_WritePin(TESTLED_R_GPIO_Port, TESTLED_G_Pin, GPIO_PIN_SET);
       HAL_GPIO_WritePin(TESTLED_G_GPIO_Port, TESTLED_R_Pin, GPIO_PIN_RESET);
-      if (abs(timerLed1 - osKernelSysTick()) > LONG_LED)
+      if (abs(timerLed1 - osKernelSysTick()) > led_test_time)
       {
         timerLed1 = osKernelSysTick();
         LedTest = 0;
@@ -250,11 +261,11 @@ void Algorithm(){
     {
        HAL_GPIO_WritePin(TESTLED_R_GPIO_Port, TESTLED_G_Pin, GPIO_PIN_RESET);
        HAL_GPIO_WritePin(TESTLED_G_GPIO_Port, TESTLED_R_Pin, GPIO_PIN_SET);
-     if (abs(timerLed1 - osKernelSysTick()) > LONG_LED)
-      {
-        timerLed1 = osKernelSysTick();
-        LedTest = 0;
-      }
+        if (abs(timerLed1 - osKernelSysTick()) > led_test_time)
+        {
+          timerLed1 = osKernelSysTick();
+          LedTest = 0;
+        }
     }
     else 
     {
@@ -304,13 +315,29 @@ void Algorithm(){
       btnRsTimer = msRs;    
       if(!buttrs_long_state)// действие при коротком нажатии
       {
-          dev_cntrl.activate_rstest = true;
+          if (dev_cntrl.suzType){
+              dev_cntrl.activate_rstest = true;
+              dev_cntrl.findR =true;
+               dev_cntrl.mode = SIGNEMODE;
+          }
+          else {
+             SetOnContinuously(); 
+             dev_cntrl.findR =true;
+          }
       }
       else 
       {
-          dev_cntrl.calibrateR = true;
-          SetCycleTestMode();
-          StartRSTest();
+        if (dev_cntrl.suzType){
+         
+            SetCycleTestMode();
+            StartRSTest();
+          //  SetOnContinuously();
+            dev_cntrl.findMinR = true;
+        }
+        else {
+          SetOnContinuously();
+          dev_cntrl.findMinR = true;
+        }
       }
       buttrs_long_state = 0;
     }
@@ -333,41 +360,31 @@ void Algorithm(){
       btnHsTimer = msHs;    
       if(!butths_long_state) // действие при коротком нажатии
       {
-        dev_cntrl.float_test = true;
-
+        dev_cntrl.float_test = true;    // мерим поле поплавка и смотрим что бы было больше заданного
       }
       else 
       {
-        SetOnContinuously();
+        SetOnContinuously();            // калибровка катушки под поплавок 
         dev_cntrl.calibrateHS = true;
       }
        butths_long_state = 0;
     }
     
-   
- 
-    //-------------------------------------------------------------------------
-
-    //-state machine -------
-    switch(fsm)
-    {
-       case WAIT : 
-       {
+    switch(fsm){
+       case WAIT : {
             dev_cntrl.cnt1k = 0;
             DisableCoilPower();     
-            minR = 500000;
-            minRprev = minR;
+            minR = minRprev = 500000;
             maxHs = maxHSfinale = 0;
-         if(dev_cntrl.activate_rstest || dev_cntrl.continuously_on)
-         {
+            minRiso = minRisoFinale = 0;
+         if(dev_cntrl.activate_rstest || dev_cntrl.continuously_on){
            EnableCoilPower();
-           SetRSCurrent(confparam.testparam.Irs);
+         //  SetRSCurrent(confparam.testparam.Irs);
            osDelay(100);
            fsm = CHOOSING_GAIN;
            ClearDSPResult();
           }
-         if(dev_cntrl.calibrateR)
-         {
+         if(dev_cntrl.calibrateR){
            SetCoilPWMFreq(100); 
            dev_cntrl.stable_on = true;
            SetResistance_offset(0);
@@ -400,27 +417,25 @@ void Algorithm(){
            SetRSCurrent(confparam.testparam.Irs);
            dev_cntrl.stable_on = false;
           } 
-         if(dev_cntrl.float_test)
-         {
+         if(dev_cntrl.float_test){
+           led_test_time = LONG_LED;
+             led_work_time = LONG_LED;
            SetCoilPWMFreq(100); 
            osDelay(100);   
-           dev_cntrl.saved_HS = GetU_HS();//GetB_HS();
-           if (dev_cntrl.saved_HS>dev_cntrl.max_Hs) LedTest = RED_LED;
+           dev_cntrl.saved_HS = GetU_HS();
+           if (dev_cntrl.saved_HS < dev_cntrl.max_Hs) LedTest = RED_LED;
            else LedTest = GREEN_LED;
            dev_cntrl.float_test = false;
-           button_hs = 3300; /*clear avg filter for button*/
           }         
          break;
         }
-       case CHOOSING_GAIN :
-       {
+       case CHOOSING_GAIN :{
          SetCoilPWMFreq(100); 
          dev_cntrl.stable_on = true;
          osDelay(50);  
          SetSignalGain(GAIN_1);
          osDelay(50);
-         if(GetURSon() > (UREF * 90 / 100))
-         { /*if more than 90%*/
+         if(GetURSon() > (UREF * 90 / 100)){ /*if more than 90%*/
            dev_cntrl.stable_on = false;
            if(dev_cntrl.continuously_on) fsm = CONTINUOUSLY_ON;
            if(dev_cntrl.activate_rstest) fsm = TEST;
@@ -432,8 +447,7 @@ void Algorithm(){
           }
          SetSignalGain(GAIN_2);
          osDelay(50);
-         if(GetURSon() > (UREF * 90 / 100))
-         { /*if more than 90%*/
+         if(GetURSon() > (UREF * 90 / 100)){ /*if more than 90%*/
            dev_cntrl.stable_on = false;
            if(dev_cntrl.continuously_on) fsm = CONTINUOUSLY_ON;
            if(dev_cntrl.activate_rstest) fsm = TEST; 
@@ -445,8 +459,7 @@ void Algorithm(){
           }
          SetSignalGain(GAIN_5);
          osDelay(50);
-         if(GetURSon() > (UREF * 90 / 100))
-         { /*if more than 90%*/
+         if(GetURSon() > (UREF * 90 / 100)){ /*if more than 90%*/
            dev_cntrl.stable_on = false;           
            if(dev_cntrl.continuously_on) fsm = CONTINUOUSLY_ON;
            if(dev_cntrl.activate_rstest) fsm = TEST;  
@@ -513,13 +526,15 @@ void Algorithm(){
          osDelay(50); 
          break;
         }
-       case CONTINUOUSLY_ON : 
-       {
+       case CONTINUOUSLY_ON : {
          ModuleGetParam(&confparam);
          SetCoilPWMFreq(confparam.testparam.Fcoil);        
          dev_cntrl.saved_HS = GetU_HS();
-         if (dev_cntrl.calibrateHS)
-        {
+         dev_cntrl.saved_Riso = GetR_ISO();
+         dev_cntrl.saved_RSon = GetRS_ON(); 
+         if (dev_cntrl.calibrateHS) // popolovok calib
+         {
+
              if (dev_cntrl.saved_HS != 0 && maxHs < dev_cntrl.saved_HS)
              {
                   maxHs = dev_cntrl.saved_HS; 
@@ -531,53 +546,105 @@ void Algorithm(){
                    dev_cntrl.TempObserver.inputR = maxHSfinale;
                     TempObserverUpdate(&dev_cntrl.TempObserver);
                    SetCoilCurrent(dev_cntrl.TempObserver.outputT);   
-                   ModuleGetParam(&devparam);
-                   devparam.testparam.Icoil = dev_cntrl.TempObserver.outputT;          
-                   ModuleSetParam(&devparam);
-
+                   ModuleGetParam(&confparam);
+                   confparam.testparam.Icoil = dev_cntrl.TempObserver.outputT;          
+                   ModuleSetParam(&confparam);
+                   timerLed1 = osKernelSysTick();                 
                    LedTest = GREEN_LED;
               }
              if (maxHSfinale !=0 && maxHSfinale == dev_cntrl.saved_HS)
              {
                   dev_cntrl.calibrateHS = false;
                   dev_cntrl.continuously_on = false;
-                  LedWork = GREEN_LED;
              }
-          }        
+          } 
+         else {
+         
+         if (dev_cntrl.suzType == 0){     
+                  if (dev_cntrl.findMinR)        // ищем наш модуль герконов
+                    {
+                       if (dev_cntrl.saved_Riso != 0 && minRiso < dev_cntrl.saved_Riso)
+                       {
+                            minRiso = dev_cntrl.saved_Riso; 
+                       }
+                    
+                        if (minRiso > 50)
+                        {
+                            minRisoFinale = minRiso;
+                            timerLed1 = osKernelSysTick();
+                            LedTest = GREEN_LED;
+                          dev_cntrl.findMinR = false;
+                          dev_cntrl.activate_rstest = false;
+                          dev_cntrl.continuously_on = false;
+                        }
+                        
+                       /* if (minRisoFinale >= dev_cntrl.saved_Riso && dev_cntrl.saved_Riso !=0) 
+                        {
+
+                        }*/
+                    }
+                  if (dev_cntrl.findR) 
+                    {
+                      if (dev_cntrl.saved_Riso >= 60)
+                      {
+                        timerLed1 = osKernelSysTick();
+                        LedTest = GREEN_LED;
+                      }
+                      else
+                      {
+                       timerLed1 = osKernelSysTick();
+                        LedTest = RED_LED;
+                      }
+                          fsm = WAIT;
+                          dev_cntrl.findR = false;
+                          dev_cntrl.activate_rstest = false;
+                          dev_cntrl.continuously_on = false;
+                          
+                    }
+               }
+         else{
+         
+         
+         }
+         }
          
          if(!dev_cntrl.continuously_on) fsm = WAIT;
          break;
         }        
-       case TEST : 
-       {
+       case TEST : {
+             led_test_time = LONG_LED;
+             led_work_time = LONG_LED;
+             
          ModuleGetParam(&confparam);         
          SetCoilPWMFreq(confparam.testparam.Fcoil);         
-        
-         if(dev_cntrl.mode == SIGNEMODE){   
-           osDelay(1000);  
-           if (dev_cntrl.cnt1k >= 100){
-           dev_cntrl.saved_Dispertion = GetDispertion();
-            if(dev_cntrl.saved_RSon <= dev_cntrl.max_Rs && dev_cntrl.saved_Dispertion < dev_cntrl.max_Dispersion)  
-            {           
-              timerLed1 = osKernelSysTick();
-              LedTest = GREEN_LED;
-            }              
-            else   
-            {           
-               timerLed1 = osKernelSysTick();
-               LedTest = RED_LED;
-            }           
-           fsm = WAIT;
-           dev_cntrl.activate_rstest = false;
-           button_rs = 3300; /*clear avg filter for button*/
-           }
-          }
-         else if(!dev_cntrl.activate_rstest) fsm = WAIT;         
+         if (dev_cntrl.suzType == 1){ 
+             if(dev_cntrl.mode == SIGNEMODE){   
+               osDelay(1000);  
+               if (dev_cntrl.cnt1k >= 100){
+               dev_cntrl.saved_Dispertion = GetDispertion();
+                if(dev_cntrl.saved_RSon <= dev_cntrl.max_Rs && dev_cntrl.saved_Dispertion < dev_cntrl.max_Dispersion && dev_cntrl.saved_RSon !=0)  
+                {           
+                  timerLed1 = osKernelSysTick();
+                  LedTest = GREEN_LED;
+                  dev_cntrl.findR = false;
+                }              
+                else   
+                {           
+                   timerLed1 = osKernelSysTick();
+                   LedTest = RED_LED;
+                   dev_cntrl.findR = false;
+                }           
+               fsm = WAIT;
+               dev_cntrl.activate_rstest = false;
+               dev_cntrl.mode = CYCLEMODE;
+               
+               }
+              }
+                      
          
-         dev_cntrl.saved_RSon = GetRS_ON();   
-         dev_cntrl.saved_Riso = GetR_ISO();
+         dev_cntrl.saved_RSon = GetRS_ON();      
           
-         if (dev_cntrl.calibrateR){
+         if (dev_cntrl.findMinR){
              if (dev_cntrl.saved_RSon != 0 && minR > dev_cntrl.saved_RSon)
              {
                   minR = dev_cntrl.saved_RSon; 
@@ -586,20 +653,25 @@ void Algorithm(){
               if (minR <10000 && (dev_cntrl.saved_RSon > 20000 || dev_cntrl.saved_RSon == 0))
               {
                   minRprev = minR;
+                  LedTest = GREEN_LED;
               }
               
-              if (minRprev < 5000 && minRprev >= dev_cntrl.saved_RSon && dev_cntrl.saved_RSon !=0) 
-                LedTest = RED_LED;
+              if (minRprev < 10000 && minRprev >= dev_cntrl.saved_RSon && dev_cntrl.saved_RSon !=0) 
+              {
+                dev_cntrl.findMinR = false;
+                dev_cntrl.activate_rstest = false;
+              }
+               
          }
+         }
+         if(!dev_cntrl.activate_rstest) fsm = WAIT; 
 
          break;
         }        
-      }
+    }
     osThreadYield();  
    }
 }
-
-
 
 
 void SetMaxRs(uint32_t R){
