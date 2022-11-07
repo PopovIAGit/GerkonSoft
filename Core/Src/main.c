@@ -211,7 +211,7 @@ __IO uint32_t uwWriteReadStatus = 0;
   osThreadDef(AlgorithmTask, Algorithm, osPriorityNormal, 0, 1024);
   AlgorithmHandle = osThreadCreate(osThread(AlgorithmTask), NULL); 
    
-  osThreadDef(AnalogMeashureTask, AnalogMeashure, osPriorityNormal, 0, 2056);
+  osThreadDef(AnalogMeashureTask, AnalogMeashure, osPriorityNormal, 0, 1024);
   AnalogMeashureHandle = osThreadCreate(osThread(AnalogMeashureTask), NULL);  
   
   /* USER CODE BEGIN RTOS_THREADS */
@@ -256,8 +256,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 12;
-  RCC_OscInitStruct.PLL.PLLN = 192;
+  RCC_OscInitStruct.PLL.PLLM = 12; //12
+  RCC_OscInitStruct.PLL.PLLN = 192;//192
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)

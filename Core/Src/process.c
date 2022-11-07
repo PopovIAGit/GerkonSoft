@@ -98,14 +98,19 @@ static uint32_t maxHs = 0;
 static uint32_t maxHSfinale = 0;
 /*-----------------------------------------------------------------------------
 ToDo List
-1 поиск положения - 
+1 поиск положения - READY
 2 проверка геркона 2/3 - READY
 3 АЦП датчика холла - READY
 4 Подстройка катушки под поплавок - READY
 5 Компановка веба -
 6 Подключение javascript -
 7 Управление - долгое нажатие, короткое нажатие, отпускание и тд - READY
-8 Индикация типа нажатий - подумать
+-------------------------------------------------------------------------------
+ Работы по стенду
+1. опредедение МДС срабатывания и МДС отпускания
+2. Режим автотестирования - разные токи + МДС + дисперсия по нажатию
+
+
 -----------------------------------------------------------------------------*/
 
 //--------------------------------------------------------
@@ -419,7 +424,7 @@ void Algorithm(){
           } 
          if(dev_cntrl.float_test){
            led_test_time = LONG_LED;
-             led_work_time = LONG_LED;
+           led_work_time = LONG_LED;
            SetCoilPWMFreq(100); 
            osDelay(100);   
            dev_cntrl.saved_HS = GetU_HS();
@@ -540,9 +545,9 @@ void Algorithm(){
                   maxHs = dev_cntrl.saved_HS; 
              }
           
-              if (maxHs > 740 && (dev_cntrl.saved_HS < 740 || dev_cntrl.saved_HS == 0) && maxHSfinale ==0)
+              if (maxHs > 740 && (dev_cntrl.saved_HS < (maxHs - 50) || dev_cntrl.saved_HS == 0) && maxHSfinale ==0)
               {
-                   maxHSfinale = maxHs;
+                   maxHSfinale = maxHs - 2;
                    dev_cntrl.TempObserver.inputR = maxHSfinale;
                     TempObserverUpdate(&dev_cntrl.TempObserver);
                    SetCoilCurrent(dev_cntrl.TempObserver.outputT);   
@@ -560,47 +565,47 @@ void Algorithm(){
           } 
          else {
          
-         if (dev_cntrl.suzType == 0){     
-                  if (dev_cntrl.findMinR)        // ищем наш модуль герконов
-                    {
-                       if (dev_cntrl.saved_Riso != 0 && minRiso < dev_cntrl.saved_Riso)
-                       {
-                            minRiso = dev_cntrl.saved_Riso; 
-                       }
-                    
-                        if (minRiso > 50)
+             if (dev_cntrl.suzType == 0){     
+                      if (dev_cntrl.findMinR)        // ищем наш модуль герконов
                         {
-                            minRisoFinale = minRiso;
+                           if (dev_cntrl.saved_Riso != 0 && minRiso < dev_cntrl.saved_Riso)
+                           {
+                                minRiso = dev_cntrl.saved_Riso; 
+                           }
+                        
+                            if (minRiso > 60)
+                            {
+                                minRisoFinale = minRiso;
+                                timerLed1 = osKernelSysTick();
+                                LedTest = GREEN_LED;
+                              dev_cntrl.findMinR = false;
+                              dev_cntrl.activate_rstest = false;
+                              dev_cntrl.continuously_on = false;
+                            }
+                            
+                           /* if (minRisoFinale >= dev_cntrl.saved_Riso && dev_cntrl.saved_Riso !=0) 
+                            {
+
+                            }*/
+                        }
+                      if (dev_cntrl.findR) 
+                        {
+                          if (dev_cntrl.saved_Riso >= 60)
+                          {
                             timerLed1 = osKernelSysTick();
                             LedTest = GREEN_LED;
-                          dev_cntrl.findMinR = false;
-                          dev_cntrl.activate_rstest = false;
-                          dev_cntrl.continuously_on = false;
+                          }
+                          else
+                          {
+                           timerLed1 = osKernelSysTick();
+                            LedTest = RED_LED;
+                          }
+                              fsm = WAIT;
+                              dev_cntrl.findR = false;
+                              dev_cntrl.activate_rstest = false;
+                              dev_cntrl.continuously_on = false;
+                              
                         }
-                        
-                       /* if (minRisoFinale >= dev_cntrl.saved_Riso && dev_cntrl.saved_Riso !=0) 
-                        {
-
-                        }*/
-                    }
-                  if (dev_cntrl.findR) 
-                    {
-                      if (dev_cntrl.saved_Riso >= 60)
-                      {
-                        timerLed1 = osKernelSysTick();
-                        LedTest = GREEN_LED;
-                      }
-                      else
-                      {
-                       timerLed1 = osKernelSysTick();
-                        LedTest = RED_LED;
-                      }
-                          fsm = WAIT;
-                          dev_cntrl.findR = false;
-                          dev_cntrl.activate_rstest = false;
-                          dev_cntrl.continuously_on = false;
-                          
-                    }
                }
          else{
          
@@ -612,8 +617,7 @@ void Algorithm(){
          break;
         }        
        case TEST : {
-             led_test_time = LONG_LED;
-             led_work_time = LONG_LED;
+
              
          ModuleGetParam(&confparam);         
          SetCoilPWMFreq(confparam.testparam.Fcoil);         
@@ -734,6 +738,10 @@ uint32_t GetLastRSon(){
 uint32_t GetSuzType(){
  return dev_cntrl.suzType; 
 }
+uint32_t GetSavedRIso(){
+ return dev_cntrl.saved_Riso; 
+}
+
 
 void SetSuzType(uint32_t suz){
     

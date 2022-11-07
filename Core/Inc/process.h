@@ -4,6 +4,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+
+#define USE_STAND 0
+
 #define NUM_DOTS 37  
 #define KTY83_MIN_RESIST	730	// Нижн. предел сопр. датчика. Если сопр. ниже этого зн-я, считаем что КЗ
 #define KTY83_MAX_RESIST	936	// Верхн. предел сопр. датчика. Если сопр. выше этого зн-я, считаем что обрыв
@@ -16,9 +19,9 @@ typedef struct {
 //---------------------------------------------------------------------
 typedef struct {
 	TDot					dots[NUM_DOTS];	// Массив точек для интерполяции
-	uint16_t						inputR;		// Вход: АЦП (сопротивление датчика температуры)
-	uint16_t						maxResist;	// Параметр: максимальное сопротивление датчика
-	uint16_t						outputT;	// Выход: температура
+	uint16_t				inputR;		// Вход: АЦП (сопротивление датчика температуры)
+	uint16_t				maxResist;	// Параметр: максимальное сопротивление датчика
+	uint16_t				outputT;	// Выход: температура
 	bool					fault;		// Флаг сбоя датчика
 } TTempObserver;
 
@@ -65,6 +68,7 @@ void SetMaxDispersion(uint32_t R);
 void SetMaxHs(uint32_t R);
 void SetSuzType(uint32_t suz);
 uint32_t GetSuzType();
+uint32_t GetSavedRIso();
 
 void TempObserverInit(TTempObserver *);
 void TempObserverUpdate (TTempObserver *);

@@ -271,23 +271,24 @@ void TIM1_UP_TIM10_IRQHandler(void){
    HAL_DMA_Start(&hdma_adc1, (uint32_t)(ADC1_BASE + 0x308), (uint32_t)&adc_data_array[0], BUFSIZE / 2); 
    HAL_ADCEx_MultiModeStart_DMA(&hadc1,(uint32_t*)&adc_data_array[0] , BUFSIZE / 2);
      
-   /*calculate data during reed switch was off*/   
+   //calculate data during reed switch was off   
    U_HS_summa_shadow = 0; U_MR_summa_shadow = 0; idy = 0;
    U_RS_summa_shadow = 0; U_CS_summa_shadow = 0; 
    ptr = &adc_data_array[BUFSIZE / 2];   
-   for(idx = 0; idx < BUFSIZE / 2; idx = idx + 4){
+    for(idx = 0; idx < BUFSIZE / 2; idx = idx + 4)
+   {
      U_HS_summa_shadow += ptr[idx] >> 16;
      U_HS_summa_shadow += ptr[idx + 2] >> 16;
      U_MR_summa_shadow += ptr[idx + 1] >> 16;
      U_MR_summa_shadow += ptr[idx + 3] >> 16;     
-     U_CS_summa_shadow += (ptr[idx + 1] & 0xffff) * UREF / 4096; /*mV*/
-     U_CS_summa_shadow += (ptr[idx + 3] & 0xffff) * UREF / 4096; /*mV*/
+     U_CS_summa_shadow += (ptr[idx + 1] & 0xffff) * UREF / 4096; //mV
+     U_CS_summa_shadow += (ptr[idx + 3] & 0xffff) * UREF / 4096; //mV
     }
    
-   U_HS_avg = U_HS_summa_shadow / (BUFSIZE / 4); /*4 samples in one cycle*/
-   U_MR_avg = U_MR_summa_shadow / (BUFSIZE / 4); /*4 samples in one cycle*/
-   U_CSoff_avg = U_CS_summa_shadow / (BUFSIZE / 4); /*4 samples in one cycle*/
-   U_RSoff_avg = U_RS_summa_shadow / (BUFSIZE / 4); /*4 samples in one cycle*/   
+   U_HS_avg = U_HS_summa_shadow / (BUFSIZE / 4); //4 samples in one cycle
+   U_MR_avg = U_MR_summa_shadow / (BUFSIZE / 4); //4 samples in one cycle
+   U_CSoff_avg = U_CS_summa_shadow / (BUFSIZE / 4); //4 samples in one cycle
+   U_RSoff_avg = U_RS_summa_shadow / (BUFSIZE / 4); //4 samples in one cycle   */
   }
  else{
    polarity = false;
@@ -297,32 +298,33 @@ void TIM1_UP_TIM10_IRQHandler(void){
    HAL_DMA_Start(&hdma_adc1, (uint32_t)(ADC1_BASE + 0x308), (uint32_t)&adc_data_array[BUFSIZE / 2], BUFSIZE / 2);          
    HAL_ADCEx_MultiModeStart_DMA(&hadc1,(uint32_t*)&adc_data_array[BUFSIZE / 2] , BUFSIZE / 2);
   
-   /*calculate data during reed switch was on*/   
+   //calculate data during reed switch was on
    U_HS_summa_shadow = 0; U_MR_summa_shadow = 0; idy = 0;
    U_RS_summa_shadow = 0; 
    
    ptr = &adc_data_array[0];
-   for(idx = 0; idx < BUFSIZE / 2; idx = idx + 4){
+   for(idx = 0; idx < BUFSIZE / 2; idx = idx + 4)
+   {
      U_HS_summa_shadow += ptr[idx] >> 16;
      U_HS_summa_shadow += ptr[idx + 2] >> 16;
      U_MR_summa_shadow += ptr[idx + 1] >> 16;
      U_MR_summa_shadow += ptr[idx + 3] >> 16;
      
-     I = (ptr[idx + 1] & 0xffff) * UREF / 4096 * 1000 / SHUNT_R; /*mkA*/
-     U = (ptr[idx] & 0xffff) * UREF / 4096 * 1000 / 694 * 100 / gain; /*mkV*/
-     U_RS_summa_shadow += (ptr[idx] & 0xffff) * UREF / 4096; /*mV*/       
-     if(I > 0) R_RS[idy++] = U * 1000 / I; /*mOmh*/
+     I = (ptr[idx + 1] & 0xffff) * UREF / 4096 * 1000 / SHUNT_R; //mkA
+     U = (ptr[idx] & 0xffff) * UREF / 4096 * 1000 / 694 * 100 / gain; //mkV
+     U_RS_summa_shadow += (ptr[idx] & 0xffff) * UREF / 4096; //mV      
+     if(I > 0) R_RS[idy++] = U * 1000 / I; //mOmh
      else R_RS[idy++] = 0xffff;
-     I = (ptr[idx + 3] & 0xffff) * UREF / 4096 * 1000 / SHUNT_R; /*mkA*/
-     U = (ptr[idx + 2] & 0xffff) * UREF / 4096 * 1000 / 694 * 100 / gain ; /*mkV*/
-     U_RS_summa_shadow += (ptr[idx + 2] & 0xffff) * UREF / 4096; /*mV*/       
-     if(I > 0) R_RS[idy++] = U * 1000 / I; /*mOmh*/
+     I = (ptr[idx + 3] & 0xffff) * UREF / 4096 * 1000 / SHUNT_R; //mkA
+     U = (ptr[idx + 2] & 0xffff) * UREF / 4096 * 1000 / 694 * 100 / gain ; //mkV
+     U_RS_summa_shadow += (ptr[idx + 2] & 0xffff) * UREF / 4096; //mV       
+     if(I > 0) R_RS[idy++] = U * 1000 / I; //mOmh
      else R_RS[idy++] = 0xffff;
     }
 
-   U_HS_avg = U_HS_summa_shadow / (BUFSIZE / 4); /*4 samples in one cycle*/
-   U_MR_avg = U_MR_summa_shadow / (BUFSIZE / 4); /*4 samples in one cycle*/
-   U_RSon_avg = U_RS_summa_shadow / (BUFSIZE / 4); /*4 samples in one cycle*/     
+   U_HS_avg = U_HS_summa_shadow / (BUFSIZE / 4); //4 samples in one cycle
+   U_MR_avg = U_MR_summa_shadow / (BUFSIZE / 4); //4 samples in one cycle
+   U_RSon_avg = U_RS_summa_shadow / (BUFSIZE / 4); //4 samples in one cycle    
    mptr = osMailAlloc(mail, 0);
    if(mptr != NULL){
      memcpy((uint8_t*)mptr->R_RS, (uint8_t*)R_RS, sizeof(R_RS));
@@ -379,7 +381,13 @@ uint16_t GetR_ISO(){/*in MOmh*/
 uint16_t GetRS_ON(){/*in mOmh*/
   
   if(R_RSon_avg < RS_offset) return 0;
-  else return (R_RSon_avg - RS_offset);
+  else 
+  {
+    if ((R_RSon_avg - RS_offset) > 10000) return 0;
+    else  return (R_RSon_avg - RS_offset);
+  }
+    
+    
 }
 
 uint16_t GetRS_OFF(){/*in Omh*/
@@ -529,6 +537,8 @@ void AnalogMeashure(){
       }      
      osThreadYield(); 
     }
+
+
 }
 
 void ClearDSPResult(){

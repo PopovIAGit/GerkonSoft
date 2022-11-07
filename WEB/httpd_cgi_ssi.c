@@ -79,7 +79,7 @@ u16_t SSI_Handler(int iIndex, char *pcInsert, int iInsertLen){
      strcpy(pcInsert + lenString, "\n");
      lenString++;
     /*R ISO*/ 
-     sprintf(string, "%d", GetR_ISO());          
+     sprintf(string, "%d", /*GetR_ISO()*/ GetSavedRIso());          
      strcpy(pcInsert + lenString, string);
      lenString += strlen(string);
      /*new line*/
