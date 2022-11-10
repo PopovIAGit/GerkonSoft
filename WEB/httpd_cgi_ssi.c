@@ -9,6 +9,7 @@
 #include "eeprom.h"
 #include "process.h"
 #include "analog.h"
+#include "main.h"
 
 
 extern struct netif xnetif;
@@ -19,8 +20,12 @@ static struct{
 }WEBFlags = {"/index.shtml", false};
 
 /* we will use character "t" as tag for CGI */
-char const* TAGCHAR="t";
-char const** TAGS=&TAGCHAR;
+char const* TAGCHAR[]={"t","a","b","c"};
+
+char const** TAGS=TAGCHAR;
+
+//char const* TAGCHAR="t";
+//char const** TAGS=&TAGCHAR;
 
 const char * WEB_CGI_Handler0(int iIndex, int iNumParams, char *pcParam[], char *pcValue[]);
 const char * WEB_CGI_Handler1(int iIndex, int iNumParams, char *pcParam[], char *pcValue[]);
@@ -35,225 +40,242 @@ const tCGI WEB_CGI_3={"/web3.cgi", WEB_CGI_Handler3};
 
 /* Cgi call table, only one CGI used */
 tCGI CGI_TAB[4];
-
-
 // -----------------------------------------------------------------------------    
 // ------------------------------- SSI Handler ---------------------------------
 // -----------------------------------------------------------------------------                   
-  
+  char colour;
 u16_t SSI_Handler(int iIndex, char *pcInsert, int iInsertLen){
  
  uint32_t lenString = 0;
  static devparam_t devparam;
  uint8_t string[30];
  
+ char *TagName = NULL;
+    // Находим здесь соответствующий тег по индексу
+ if (iIndex == 0){
  /*config.shtml*/   
- if(strcmp(WEBFlags.web_page, "/main_conf.shtml") == 0){ 
-   if(iIndex == 0){
-     /*R static on*/ 
-     sprintf(string, "%d", GetLastRSon());          
-     strcpy(pcInsert + lenString, string);
-     lenString += strlen(string);
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;
-     /*R static off*/ 
-     if(GetRS_OFF() < 50){
-       sprintf(string, "%d", GetRS_OFF());          
-       strcpy(pcInsert + lenString, string);
-       lenString += strlen(string);
+     if(strcmp(WEBFlags.web_page, "/main_conf.shtml") == 0){ 
+       if(iIndex == 0){
+         /*R static on*/ 
+         sprintf(string, "%d", GetLastRSon());          
+         strcpy(pcInsert + lenString, string);
+         lenString += strlen(string);
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;
+         /*R static off*/ 
+         if(GetRS_OFF() < 50){
+           sprintf(string, "%d", GetRS_OFF());          
+           strcpy(pcInsert + lenString, string);
+           lenString += strlen(string);
+          }
+         else{
+           sprintf(string, "> 50");          
+           strcpy(pcInsert + lenString, string);
+           lenString += strlen(string);
+          }
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;     
+         /*R static dispertion*/ 
+         sprintf(string, "%.2f", GetDispertion());          
+         strcpy(pcInsert + lenString, string);
+         lenString += strlen(string);
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;
+        /*R ISO*/ 
+         sprintf(string, "%d", /*GetR_ISO()*/ GetSavedRIso());          
+         strcpy(pcInsert + lenString, string);
+         lenString += strlen(string);
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;       
+        /*B*/ 
+         sprintf(string, "%d", GetU_HS() ); // GetB_HS()        
+         strcpy(pcInsert + lenString, string);
+         lenString += strlen(string);
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;       
+        /*rs current*/ 
+         sprintf(string, "%d", GetRSCurrent());          
+         strcpy(pcInsert + lenString, string);
+         lenString += strlen(string);
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;   
+        /*frequence*/ 
+         sprintf(string, "%d", GetCoilPWMFreq());          
+         strcpy(pcInsert + lenString, string);
+         lenString += strlen(string);
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;
+         /*coil current*/
+         sprintf(string, "%d", GetCoilCurrent());          
+         strcpy(pcInsert + lenString, string);
+         lenString += strlen(string);
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;   
+        /*cycles counter*/ 
+         sprintf(string, "%d", GetCommonCnt());          
+         strcpy(pcInsert + lenString, string);
+         lenString += strlen(string);
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;       
+        /*good result counter*/ 
+         sprintf(string, "%d", GetGoodCnt());          
+         strcpy(pcInsert + lenString, string);
+         lenString += strlen(string);
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;       
+        /*transient time*/ 
+         sprintf(string, "%d", GetTransientTime());          
+         strcpy(pcInsert + lenString, string);
+         lenString += strlen(string);
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;    
+          /*suz type*/
+          sprintf(string, "%d", GetSuzType());          
+         strcpy(pcInsert + lenString, string);
+         lenString += strlen(string); 
+          /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;   
+         /*SW version*/         
+           sprintf(string, "12.001.1.0.01");          
+           strcpy(pcInsert + lenString, string);
+           lenString += strlen(string);
+           
+        }
+       return strlen(pcInsert); 
       }
-     else{
-       sprintf(string, "> 50");          
-       strcpy(pcInsert + lenString, string);
-       lenString += strlen(string);
-      }
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;     
-     /*R static dispertion*/ 
-     sprintf(string, "%.2f", GetDispertion());          
-     strcpy(pcInsert + lenString, string);
-     lenString += strlen(string);
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;
-    /*R ISO*/ 
-     sprintf(string, "%d", /*GetR_ISO()*/ GetSavedRIso());          
-     strcpy(pcInsert + lenString, string);
-     lenString += strlen(string);
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;       
-    /*B*/ 
-     sprintf(string, "%d", GetU_HS() ); // GetB_HS()        
-     strcpy(pcInsert + lenString, string);
-     lenString += strlen(string);
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;       
-    /*rs current*/ 
-     sprintf(string, "%d", GetRSCurrent());          
-     strcpy(pcInsert + lenString, string);
-     lenString += strlen(string);
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;   
-    /*frequence*/ 
-     sprintf(string, "%d", GetCoilPWMFreq());          
-     strcpy(pcInsert + lenString, string);
-     lenString += strlen(string);
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;
-     /*coil current*/
-     sprintf(string, "%d", GetCoilCurrent());          
-     strcpy(pcInsert + lenString, string);
-     lenString += strlen(string);
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;   
-    /*cycles counter*/ 
-     sprintf(string, "%d", GetCommonCnt());          
-     strcpy(pcInsert + lenString, string);
-     lenString += strlen(string);
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;       
-    /*good result counter*/ 
-     sprintf(string, "%d", GetGoodCnt());          
-     strcpy(pcInsert + lenString, string);
-     lenString += strlen(string);
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;       
-    /*transient time*/ 
-     sprintf(string, "%d", GetTransientTime());          
-     strcpy(pcInsert + lenString, string);
-     lenString += strlen(string);
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;    
-      /*suz type*/
-      sprintf(string, "%d", GetSuzType());          
-     strcpy(pcInsert + lenString, string);
-     lenString += strlen(string); 
-      /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;   
-     /*SW version*/
-     strcpy(pcInsert + lenString, __DATE__); 
-     lenString += strlen(__DATE__); 
-       
-    }
-   return strlen(pcInsert); 
-  }
- 
- if(strcmp(WEBFlags.web_page, "/config_eth.shtml") == 0){ 
-   if( iIndex == 0 ){ 
-     ModuleGetParam(&devparam);
-     /*IP address*/
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.dev_ip.addr));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);
-     strcpy(pcInsert + lenString, "."); 
-     lenString += 1;
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.dev_ip.addr >> 8));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);     
-     strcpy(pcInsert + lenString, "."); 
-     lenString += 1;     
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.dev_ip.addr >> 16));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);     
-     strcpy(pcInsert + lenString, "."); 
-     lenString += 1;     
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.dev_ip.addr >> 24));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);     
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;    
      
-     /*GW address*/
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.gw_ip.addr));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);
-     strcpy(pcInsert + lenString, "."); 
-     lenString += 1;
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.gw_ip.addr >> 8));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);     
-     strcpy(pcInsert + lenString, "."); 
-     lenString += 1;     
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.gw_ip.addr >> 16));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);     
-     strcpy(pcInsert + lenString, "."); 
-     lenString += 1;     
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.gw_ip.addr >> 24));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);     
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;    
-     
-     /*net mask*/
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.netmask.addr));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);
-     strcpy(pcInsert + lenString, "."); 
-     lenString += 1;
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.netmask.addr >> 8));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);     
-     strcpy(pcInsert + lenString, "."); 
-     lenString += 1;     
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.netmask.addr >> 16));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);     
-     strcpy(pcInsert + lenString, "."); 
-     lenString += 1;     
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.netmask.addr >> 24));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);     
-     /*new line*/
-     strcpy(pcInsert + lenString, "\n");
-     lenString++;        
-     
-     /*MAC address*/
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.mac));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);
-     strcpy(pcInsert + lenString, ":"); 
-     lenString += 1;     
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.mac >> 8));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);
-     strcpy(pcInsert + lenString, ":"); 
-     lenString += 1;          
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.mac >> 16));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);
-     strcpy(pcInsert + lenString, ":"); 
-     lenString += 1;          
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.mac >> 24));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);
-     strcpy(pcInsert + lenString, ":"); 
-     lenString += 1;          
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.mac >> 32));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);
-     strcpy(pcInsert + lenString, ":"); 
-     lenString += 1;          
-     sprintf(string, "%d",  (uint8_t)(devparam.eth.mac >> 40));          
-     strcpy(pcInsert + lenString, string); 
-     lenString += strlen(string);
-   /* need to be inserted in html */   
-     return strlen(pcInsert);                                      
-    }   
+     if(strcmp(WEBFlags.web_page, "/config_eth.shtml") == 0){ 
+       if( iIndex == 0 ){ 
+         ModuleGetParam(&devparam);
+         /*IP address*/
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.dev_ip.addr));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);
+         strcpy(pcInsert + lenString, "."); 
+         lenString += 1;
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.dev_ip.addr >> 8));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);     
+         strcpy(pcInsert + lenString, "."); 
+         lenString += 1;     
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.dev_ip.addr >> 16));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);     
+         strcpy(pcInsert + lenString, "."); 
+         lenString += 1;     
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.dev_ip.addr >> 24));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);     
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;    
+         
+         /*GW address*/
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.gw_ip.addr));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);
+         strcpy(pcInsert + lenString, "."); 
+         lenString += 1;
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.gw_ip.addr >> 8));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);     
+         strcpy(pcInsert + lenString, "."); 
+         lenString += 1;     
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.gw_ip.addr >> 16));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);     
+         strcpy(pcInsert + lenString, "."); 
+         lenString += 1;     
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.gw_ip.addr >> 24));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);     
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;    
+         
+         /*net mask*/
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.netmask.addr));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);
+         strcpy(pcInsert + lenString, "."); 
+         lenString += 1;
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.netmask.addr >> 8));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);     
+         strcpy(pcInsert + lenString, "."); 
+         lenString += 1;     
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.netmask.addr >> 16));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);     
+         strcpy(pcInsert + lenString, "."); 
+         lenString += 1;     
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.netmask.addr >> 24));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);     
+         /*new line*/
+         strcpy(pcInsert + lenString, "\n");
+         lenString++;        
+         
+         /*MAC address*/
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.mac));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);
+         strcpy(pcInsert + lenString, ":"); 
+         lenString += 1;     
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.mac >> 8));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);
+         strcpy(pcInsert + lenString, ":"); 
+         lenString += 1;          
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.mac >> 16));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);
+         strcpy(pcInsert + lenString, ":"); 
+         lenString += 1;          
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.mac >> 24));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);
+         strcpy(pcInsert + lenString, ":"); 
+         lenString += 1;          
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.mac >> 32));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);
+         strcpy(pcInsert + lenString, ":"); 
+         lenString += 1;          
+         sprintf(string, "%d",  (uint8_t)(devparam.eth.mac >> 40));          
+         strcpy(pcInsert + lenString, string); 
+         lenString += strlen(string);
+       /* need to be inserted in html */   
+         return strlen(pcInsert);                                      
+        }   
   } 
+ }else if (iIndex == 1)
+ {
+         sprintf(string, "%d", 999);          
+         strcpy(pcInsert + lenString, string);
+         lenString += strlen(string);
+   
+   return strlen(pcInsert); 
+ }else if (iIndex == 2)
+ {
+  return strlen(pcInsert); 
+ }else if (iIndex == 3)
+ {
+  return strlen(pcInsert); 
+ }
+
  return 0;
 }
 // -----------------------------------------------------------------------------    
@@ -384,8 +406,10 @@ const char * WEB_CGI_Handler1(int iIndex, int iNumParams, char *pcParam[], char 
      devparam.testparam.MaxHS = maxHs;          
      ModuleSetParam(&devparam);          
     }
-  
- 
+    if(strcmp(pcParam[i] , "buttoncolor") == 0 )             
+    {
+     uint32_t ttt = 1;
+    }
  }
  return WEBFlags.web_page;
 }
@@ -486,7 +510,7 @@ const char * WEB_CGI_Handler3(int iIndex, int iNumParams, char *pcParam[], char 
 void httpd_ssi_init(void)
 {  
   /* configure SSI handlers */
-  http_set_ssi_handler(SSI_Handler, (char const **)TAGS, 1);
+  http_set_ssi_handler(SSI_Handler, (char const **)TAGS, 4);
 }
 
 /**

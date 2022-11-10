@@ -933,8 +933,8 @@ void StartDefaultTask(void const * argument)
   uint32_t phy_reg;
   
   /* init code for LWIP */
-MX_LWIP_Init(); 
- httpd_init();
+  MX_LWIP_Init(); 
+  httpd_init();
   
   for(;;){
      osDelay(10); 

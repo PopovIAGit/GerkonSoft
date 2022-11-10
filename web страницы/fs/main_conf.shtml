@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
+<html>
+<head>
 <meta charset="utf-8">
 <style>
 .btn-group button {
@@ -112,12 +113,63 @@ border-radius: 4px;
     opacity: 1; /* Показываем подсказку */
     top: 2em; /* Положение подсказки */
 
-</style><title>Управление</title>
+</style>
+<script>
+
+	let date = new Date();
+
+const options = {
+  // можно выбирать несколько файлов
+  multiple: true,
+  suggestedName: 'SUZ'+':'+ date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() ,
+  // разрешенный тип файлов
+  types: [
+    {
+      description: 'Text',
+      accept: {
+        'text/plain': '.txt'
+      }
+    }
+  ],
+  // можно выбирать только разрешенные файлы
+  // по моим наблюдениям, данная настройка работает не совсем корректно
+  excludeAcceptAllOption: true
+}
+
+var name = "МУ СУЖ";
+
+function createBlob(data) {
+  return new Blob([data], { type: "text/plain" });
+}
+
+async function button(){
+	var Cells = document.getElementById("dataId");
+	/*//alert(Cells.innerText);  не работает на МУ
+	const  fileHandle = await window.showSaveFilePicker(options)
+	let stream = await fileHandle.createWritable(options);
+	await stream.write(Cells.innerText);
+	await stream.close();*/
+	const b = createBlob(Cells.innerText); 
+	const url = window.URL.createObjectURL(b);
+
+  	const a = document.createElement('a');
+  	a.href = url;
+  	a.download = options.suggestedName; //"myFile.txt";
+  	a.click();
+}
+
+</script>
+
+<title>Управление</title>
 </head>
 
 <body>
+
+
+<a hidden = "true"></a>
+
 <div class="layout">
-	<div class="btn-group" style=" width:717px">	
+	<div class="btn-group" style="width:717px">	
 			<form method="get" action="/web1.cgi"> 
 				<button type="submit" style="background-color:green; width:33.3%" name="main_config_page">Управление</button>
 			</form>	
@@ -135,7 +187,7 @@ border-radius: 4px;
 <table rules="none" width="100%">										
 	<tbody>
 	<tr>
-		<td align="right" class="td">	Статическое сопротивление замкнутых контактов геркона, мОм<br>	
+		<td align="right" class="td" id = "123">	Статическое сопротивление замкнутых контактов геркона, мОм<br>	
 										Статическое сопротивление разомкнутых контактов геркона, Ом<br>	
 										Дисперсия сопротивление контактов геркона, мОм<br>
 										Статическое сопротивление герконового модуля, Ом<br>										
@@ -151,7 +203,7 @@ border-radius: 4px;
 										
 										
 		</td>
-		<td align="left" class="td"><output type="text"><pre class="p"><!--#t--> </pre></td>							
+		<td align="left" class="td"><output type="text" name = "data" id = "dataId"><pre class="p"><!--#t--></pre></td>							
 	</tr>						
 	</tbody>
 </table>
@@ -235,7 +287,7 @@ border-radius: 4px;
 <tbody>
 	<tr>
 		<td class="td" align="left"width="20%" data-tooltip="Диапазон задания частот следования тестовых импульсов 1...100 Гц">Частота, Гц:</td>
-		<td align="left" width="33.3%"><input name="freq" size="5" maxlength="16" class="input" value = "50"> </td>
+		<td align="left" width="33.3%"><input name="freq" size="5" maxlength="16" class="input" value = "50" id = "testInputId"> </td>
 		<td width="33.3%" align="right"><button type="submit"  name="sfreq" align="right" class="button button-save">Установить</button></td>					
 	</tr>
 </tbody>
@@ -286,11 +338,9 @@ border-radius: 4px;
 </tbody>
 </table>
 </form>	
-
-
-
-
 </div>
 </div>
+<hr>
+<button onclick="button()" class="button button-save">Сохранить данные тестирования</button>
 </body>
 </html>
